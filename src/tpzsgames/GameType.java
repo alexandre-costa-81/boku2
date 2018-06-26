@@ -1,20 +1,20 @@
 package tpzsgames;
 
-public abstract interface GameType
-{
-  public abstract void make(MoveType paramMoveType);
-  
-  public abstract void undoMove();
-  
-  public abstract void newGame();
-  
-  public abstract int eval();
-  
-  public abstract boolean won(PlayerType paramPlayerType);
-  
-  public abstract MoveType[] generateMoveList();
-  
-  public abstract BoardType getBoard();
+public abstract interface GameType {
+
+    public abstract void make(MoveType paramMoveType);
+
+    public abstract void undoMove();
+
+    public abstract void newGame();
+
+    public abstract int eval();
+
+    public abstract boolean won(PlayerType paramPlayerType);
+
+    public abstract MoveType[] generateMoveList();
+
+    public abstract BoardType getBoard();
 }
 
 

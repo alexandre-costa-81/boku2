@@ -30,6 +30,14 @@
     private static JButton selectFileButton;
     private static JLabel movesHeading;
     private static JLabel fileNameLabel;
+
+    private static void access$0() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    private static void access$1() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
     
     private FileOptionPane()
     {
