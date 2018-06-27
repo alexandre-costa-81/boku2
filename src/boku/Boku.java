@@ -2,7 +2,6 @@ package boku;
 
 import bitboard.BokuBoard;
 import bitboard.LookupTable;
-import bitboard.Map;
 import java.awt.Color;
 import java.awt.Container;
 import java.awt.Dimension;
@@ -14,7 +13,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.PrintStream;
 import javax.swing.Box;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
@@ -35,12 +33,8 @@ import tpzsgames.GameType;
 import tpzsgames.MoveType;
 import tpzsgames.PlayerType;
 import treesearch.AlphaBeta;
-import treesearch.BokuEngine;
 
-public class Boku
-        extends JApplet
-        implements GameType {
-
+public class Boku extends JApplet implements GameType {
     private static final int AUTO_PLAY_GAMES = 100;
     private static final int BLACK_MAXPLY = 3;
     private static final int WHITE_MAXPLY = 3;
@@ -78,31 +72,18 @@ public class Boku
     private static JTextArea internalBoardPane;
     private static JTextArea moveListBoardPane;
     private static final Color TABLE_COLOUR = new Color(98049);
-
     private static final int BASE_WIDTH = 48;
-
     private static final int BASE_HEIGHT = 44;
-
     private static final Dimension BASE_FIELD = new Dimension(48, 44);
-
     private static final int MARGIN = 48;
-
     private static int defaultWidth;
-
     private static int defaultHeight;
-
     private static Dimension defaultDimension;
-
     private static final int SIDE_PANEL_WIDTH = 220;
-
     private static boolean isApplet = true;
-
     private static boolean captureMove;
-
     private static Field moveField;
-
     private static Field[] captureFields;
-
     private static Field[] winnerFields;
     private static Icon borderLTIcon;
     private static Icon borderRTIcon;
@@ -134,7 +115,6 @@ public class Boku
     public static Icon arrowLDisabledIcon;
     public static Icon arrowRDisabledIcon;
     private static final String CR = System.getProperty("line.separator");
-
     private static final String authorString = "Christoph Schönberger";
     private static final String versionString = "1.21 Development release (09.01.2005)";
     private static final String yearString = "2002-2005";
@@ -145,27 +125,16 @@ public class Boku
             + CR
             + "c "
             + "2002-2005";
-
     private static final String imageFolder = "../images/";
-
     private static final String borderTT = "_borderTT.jpg";
-
     private static final String borderBB = "_borderBB.jpg";
-
     private static final String borderTR = "_borderTR.jpg";
-
     private static final String borderBR = "_borderBR.jpg";
-
     private static final String borderTL = "_borderTL.jpg";
-
     private static final String borderBL = "_borderBL.jpg";
-
     private static final String borderLT = "_borderLT.jpg";
-
     private static final String borderRT = "_borderRT.jpg";
-
     private static final String borderLC = "_borderLC.jpg";
-
     private static final String borderRC = "_borderRC.jpg";
     private static final String borderLB = "_borderLB.jpg";
     private static final String borderRB = "_borderRB.jpg";
@@ -206,10 +175,7 @@ public class Boku
 
         defaultWidth = board.getWidth() * 48 + 48;
         defaultHeight = board.getHeight() * 44 + 192;
-        defaultDimension
-                = new Dimension(
-                        defaultWidth + 220 + 144,
-                        defaultHeight);
+        defaultDimension = new Dimension(defaultWidth + 220 + 144, defaultHeight);
         setSize(defaultDimension);
 
         this.maxMoves = (board.map.numberOfFields + 60);
@@ -244,8 +210,7 @@ public class Boku
     public void start() {
     }
 
-    ImageIcon getImageIcon(String fileName)
-            throws IOException {
+    ImageIcon getImageIcon(String fileName) throws IOException {
         InputStream in = getClass().getResourceAsStream(fileName);
         byte[] buffer = new byte[in.available()];
         in.read(buffer);
@@ -305,12 +270,10 @@ public class Boku
 
         windowPanel = new Box(0);
         sidePanel = new Box(1);
-        sidePanel.setSize(
-                new Dimension(220, defaultHeight));
+        sidePanel.setSize(new Dimension(220, defaultHeight));
         historyNotePad = new JTextArea();
         historyNotePad.setEditable(false);
-        historyNotePad.setFont(
-                new Font("Monospaced", 0, 16));
+        historyNotePad.setFont(new Font("Monospaced", 0, 16));
         historyNotePad.setTabSize(7);
         historyNotePad.setMargin(new Insets(15, 15, 15, 15));
 
@@ -327,13 +290,9 @@ public class Boku
             boardPanel.add(rowPanel[i]);
 
             if ((i == 0) || (i > board.getHeight())) {
-                rowPanel[i].setPreferredSize(
-                        new Dimension(
-                                defaultWidth,
-                                borderTTIcon.getIconHeight()));
+                rowPanel[i].setPreferredSize(new Dimension(defaultWidth, borderTTIcon.getIconHeight()));
             } else {
-                rowPanel[i].setPreferredSize(
-                        new Dimension(defaultWidth, 44));
+                rowPanel[i].setPreferredSize(new Dimension(defaultWidth, 44));
             }
             rowPanel[i].setBackground(TABLE_COLOUR);
         }
@@ -400,12 +359,10 @@ public class Boku
 
         showHistoryPanel(this.options.showHistoryPanel());
         internalBoardPane = new JTextArea();
-        internalBoardPane.setFont(
-                new Font("Monospaced", 0, 16));
+        internalBoardPane.setFont(new Font("Monospaced", 0, 16));
         internalBoardPane.setEditable(false);
         moveListBoardPane = new JTextArea();
-        moveListBoardPane.setFont(
-                new Font("Monospaced", 0, 14));
+        moveListBoardPane.setFont(new Font("Monospaced", 0, 14));
         moveListBoardPane.setEditable(false);
     }
 
@@ -427,8 +384,7 @@ public class Boku
         autoplayItem.setMnemonic('A');
         autoplayItem.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                Boku.this.autoplay
-                        = ((Boku.this.playerBlack.isComputer()) && (Boku.this.playerWhite.isComputer()));
+                Boku.this.autoplay = ((Boku.this.playerBlack.isComputer()) && (Boku.this.playerWhite.isComputer()));
                 if (Boku.this.autoplay) {
                     Boku.this.resetButtons();
                     Boku.this.statistics.reset();
@@ -495,7 +451,6 @@ public class Boku
             public void actionPerformed(ActionEvent e) {
                 PlayerOptionPane.getInstance(Boku.this.playerBlack).showOptionPane();
             }
-
         });
         JMenuItem whitePlayerItem = new JMenuItem("White");
         whitePlayerItem.setMnemonic('W');
@@ -505,7 +460,6 @@ public class Boku
             public void actionPerformed(ActionEvent e) {
                 PlayerOptionPane.getInstance(Boku.this.playerWhite).showOptionPane();
             }
-
         });
         JMenu helpMenu = new JMenu("Help");
         helpMenu.setMnemonic('H');
@@ -566,8 +520,7 @@ public class Boku
         moveListItem.setEnabled(true);
         moveListItem.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                JFrame popupWindow
-                        = new JFrame("Possible moves with static evaluation");
+                JFrame popupWindow = new JFrame("Possible moves with static evaluation");
                 popupWindow.setSize(700, 450);
                 popupWindow.getContentPane().add(Boku.moveListBoardPane);
                 popupWindow.show();
@@ -598,15 +551,13 @@ public class Boku
 
     public void enableFlyOver(boolean choice) {
         for (int i = 0; i < board.map.numberOfFields; i++) {
-            fieldButton[i].setToolTipText(
-                    choice ? "   Field " + (i + 1) : "");
+            fieldButton[i].setToolTipText(choice ? "   Field " + (i + 1) : "");
         }
     }
 
     public void showHistoryPanel(boolean choice) {
         if (choice) {
-            Dimension historyPanelSize
-                    = new Dimension(220, defaultHeight);
+            Dimension historyPanelSize = new Dimension(220, defaultHeight);
             historyScrollPane.setPreferredSize(historyPanelSize);
             sidePanel.add(historyScrollPane);
             historyScrollPane.repaint();
@@ -618,8 +569,7 @@ public class Boku
 
     public void make(MoveType move) {
         if (this.nextMovePointer == this.maxMoves) {
-            throw new IndexOutOfBoundsException(
-                    "Error: Can't make move. Stack overflow.");
+            throw new IndexOutOfBoundsException("Error: Can't make move. Stack overflow.");
         }
         Move thatMove = (Move) move;
 
@@ -638,8 +588,7 @@ public class Boku
 
     public void undoMove() {
         if (this.nextMovePointer == 0) {
-            throw new IndexOutOfBoundsException(
-                    "Error: Can't undo move. Stack underflow.");
+            throw new IndexOutOfBoundsException("Error: Can't undo move. Stack underflow.");
         }
 
         Move thatMove = this.history[(--this.nextMovePointer)];
@@ -734,18 +683,13 @@ public class Boku
                 Field nextField = new Field(x, y);
                 if (isAvailable(nextField)) {
                     board.set(nextField, colour);
-                    Field[] captureFields
-                            = board.getCaptureFields(nextField, colour);
+                    Field[] captureFields = board.getCaptureFields(nextField, colour);
                     board.clear(nextField);
 
                     if (captureFields[0] != null) {
                         int counter = 0;
                         do {
-                            Move nextMove
-                                    = new Move(
-                                            nextField,
-                                            captureFields[counter],
-                                            new Marble(colour));
+                            Move nextMove = new Move(nextField, captureFields[counter], new Marble(colour));
                             moveList[(endOfList++)] = nextMove;
                             counter++;
                         } while (captureFields[counter] != null);
@@ -835,8 +779,7 @@ public class Boku
         int colour = move.getMarble().getColour();
         if (moveField != null) {
             int n = board.map.getNumber(moveField);
-            Icon marbleIcon
-                    = colour == 1 ? blackMarbleIcon : whiteMarbleIcon;
+            Icon marbleIcon = colour == 1 ? blackMarbleIcon : whiteMarbleIcon;
             fieldButton[n].setDisabledIcon(marbleIcon);
             fieldButton[n].setEnabled(false);
             fieldButton[n].repaint();
@@ -867,28 +810,19 @@ public class Boku
         Field captureField = move.getCaptureField();
         int colour = move.getMarble().getColour();
         int moveNo = (this.nextMovePointer + 1) / 2;
-        String moveStr
-                = moveFieldNumber + 1 + (captureField == null
-                        ? ""
-                        : new StringBuffer("x").append(board.map.getNumber(captureField) + 1).toString());
+        String moveStr = moveFieldNumber + 1 + (captureField == null ? "" : new StringBuffer("x").append(board.map.getNumber(captureField) + 1).toString());
         String tmpInfoStr = "";
         if ((colour == 1) && (this.playerBlack.isComputer())) {
             tmpInfoStr = tmpInfoStr + ((AlphaBeta) this.playerBlack.getEngine()).keepIndex;
         } else if ((colour == -1) && (this.playerWhite.isComputer())) {
             tmpInfoStr = tmpInfoStr + ((AlphaBeta) this.playerWhite.getEngine()).keepIndex;
         }
-        String outStr
-                = (colour == 1 ? "  " + moveNo + ".\t" : "")
-                + moveStr + (colour == 1 ? "\t" : "\n");
+        String outStr = (colour == 1 ? "  " + moveNo + ".\t" : "") + moveStr + (colour == 1 ? "\t" : "\n");
 
         if (LogWriter.isPrintModus(1)) {
             LogWriter.out.print(outStr);
         } else {
-            LogWriter.out.println(
-                    (colour == 1
-                            ? "Black's " + moveNo + ". move: "
-                            : new StringBuffer("White's ").append(moveNo).append(". move: ").toString())
-                    + moveStr);
+            LogWriter.out.println((colour == 1 ? "Black's " + moveNo + ". move: " : new StringBuffer("White's ").append(moveNo).append(". move: ").toString()) + moveStr);
         }
 
         historyNotePad.append(outStr);
@@ -908,15 +842,12 @@ public class Boku
         }
     }
 
-    class Controller
-            implements ActionListener {
-
+    class Controller implements ActionListener {
         Controller() {
         }
 
         public void actionPerformed(ActionEvent event) {
-            int fieldNumber
-                    = Integer.parseInt(event.getActionCommand());
+            int fieldNumber = Integer.parseInt(event.getActionCommand());
             int colour = Boku.this.getNextTurn();
 
             if (Boku.captureMove) {
@@ -933,8 +864,7 @@ public class Boku
                     Boku.captureFields[counter] = null;
                     counter++;
                 }
-                Move move
-                        = new Move(Boku.moveField, Boku.this.noEntryField, new Marble(colour));
+                Move move = new Move(Boku.moveField, Boku.this.noEntryField, new Marble(colour));
                 Boku.this.make(move);
                 Boku.this.writeMove(move);
 
@@ -964,10 +894,7 @@ public class Boku
 
                     for (int i = 0; i < Boku.winnerFields.length; i++) {
                         int n = Boku.board.map.getNumber(Boku.winnerFields[i]);
-                        Boku.fieldButton[n].setDisabledIcon(
-                                colour == 1
-                                        ? Boku.blackMarblePressedIcon
-                                        : Boku.whiteMarblePressedIcon);
+                        Boku.fieldButton[n].setDisabledIcon(colour == 1 ? Boku.blackMarblePressedIcon : Boku.whiteMarblePressedIcon);
                     }
                     JOptionPane.showMessageDialog(null,
                             "Congratulations!" + Boku.CR + (colour == 1 ? "Black" : "White") + " won.",
@@ -986,16 +913,12 @@ public class Boku
                             int n = Boku.board.map.getNumber(Boku.captureFields[counter]);
                             if (colour == -1) {
                                 Boku.fieldButton[n].setIcon(Boku.blackMarbleCaptureIcon);
-                                Boku.fieldButton[n].setRolloverIcon(
-                                        Boku.blackMarbleRolloverIcon);
-                                Boku.fieldButton[n].setPressedIcon(
-                                        Boku.blackMarblePressedIcon);
+                                Boku.fieldButton[n].setRolloverIcon(Boku.blackMarbleRolloverIcon);
+                                Boku.fieldButton[n].setPressedIcon(Boku.blackMarblePressedIcon);
                             } else {
                                 Boku.fieldButton[n].setIcon(Boku.whiteMarbleCaptureIcon);
-                                Boku.fieldButton[n].setRolloverIcon(
-                                        Boku.whiteMarbleRolloverIcon);
-                                Boku.fieldButton[n].setPressedIcon(
-                                        Boku.whiteMarblePressedIcon);
+                                Boku.fieldButton[n].setRolloverIcon(Boku.whiteMarbleRolloverIcon);
+                                Boku.fieldButton[n].setPressedIcon(Boku.whiteMarblePressedIcon);
                             }
                             Boku.fieldButton[n].setEnabled(true);
                             counter++;
@@ -1036,8 +959,7 @@ public class Boku
             }
             Boku.threadRunning = true;
 
-            while ((Boku.this.gameRunning)
-                    && (Boku.threadRunning) && (Boku.this.nextPlayer().isComputer())) {
+            while ((Boku.this.gameRunning) && (Boku.threadRunning) && (Boku.this.nextPlayer().isComputer())) {
                 Boku.this.enableFieldButtons(false);
                 EngineType searchEngine = Boku.this.nextPlayer().getEngine();
                 Boku.board.setLookupTable(Boku.this.nextPlayer().getLookupTable());
@@ -1065,21 +987,16 @@ public class Boku
                 }
                 Boku.board.set(computerMove.getMarble(), computerMove.getField());
 
-                Boku.winnerFields
-                        = Boku.board.getWinnerFields(computerMove.getField(), colour);
+                Boku.winnerFields = Boku.board.getWinnerFields(computerMove.getField(), colour);
                 if (Boku.winnerFields[0] != null) {
-                    Move winnerMove
-                            = new Move(computerMove.getField(), new Marble(colour));
+                    Move winnerMove = new Move(computerMove.getField(), new Marble(colour));
                     Boku.this.make(winnerMove);
                     Boku.this.writeMove(winnerMove);
                     Boku.this.updateGUI(winnerMove);
 
                     for (int i = 0; i < Boku.winnerFields.length; i++) {
                         int n = Boku.board.map.getNumber(Boku.winnerFields[i]);
-                        Boku.fieldButton[n].setDisabledIcon(
-                                colour == 1
-                                        ? Boku.blackMarblePressedIcon
-                                        : Boku.whiteMarblePressedIcon);
+                        Boku.fieldButton[n].setDisabledIcon(colour == 1 ? Boku.blackMarblePressedIcon : Boku.whiteMarblePressedIcon);
                     }
                     try {
                         Thread.sleep(2000L);
@@ -1101,18 +1018,13 @@ public class Boku
                 if (captureField != null) {
 
                     if ((!Boku.this.autoplay) && (Boku.this.options.showCaptureMessage())) {
-                        Move tmpMove
-                                = new Move(
-                                        computerMove.getField(),
-                                        computerMove.getMarble());
+                        Move tmpMove = new Move(computerMove.getField(), computerMove.getMarble());
                         Boku.this.updateGUI(tmpMove);
                         int n = Boku.board.map.getNumber(captureField);
                         if (colour == -1) {
-                            Boku.fieldButton[n].setDisabledIcon(
-                                    Boku.blackMarbleCaptureIcon);
+                            Boku.fieldButton[n].setDisabledIcon(Boku.blackMarbleCaptureIcon);
                         } else {
-                            Boku.fieldButton[n].setDisabledIcon(
-                                    Boku.whiteMarbleCaptureIcon);
+                            Boku.fieldButton[n].setDisabledIcon(Boku.whiteMarbleCaptureIcon);
                         }
                         Thread.yield();
                         JOptionPane.showMessageDialog(null,
